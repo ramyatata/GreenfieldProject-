@@ -4,6 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const colors = require('colors');
 const PORT = 3030;
+const db = require('../database/index.js');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
