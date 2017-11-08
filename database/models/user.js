@@ -26,11 +26,4 @@ let newUser = new User({
 //   }
 // });
 
-User.comparePassword = function(attemptedPassword, savedPassword, cb) {
-  bcrypt.compare(attemptedPassword, savedPassword, function(err, isMatch) {
-    if (err) { return cb(err); }
-    cb(null, isMatch);
-  });
-};
-
 module.exports = User;
