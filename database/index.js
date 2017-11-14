@@ -2,7 +2,7 @@ const colors = require('colors');
 const mongoose = require('mongoose');
 const Milestone = require('./models/milestone.js');
 const Goal = require('./models/goal.js');
-const CheckIn = require('./models/check-in.js');
+const CheckIn = require('./models/checkin.js');
 const Resource = require('./models/resource.js');
 
 mongoose.connect('mongodb://velvetElvies:velvetElvies01@ds147265.mlab.com:47265/boost');
@@ -35,28 +35,28 @@ let newCheckIn = new CheckIn({
   notes: 'notes'
 });
 
-newResource.save(function(err, user){
-  if(err){
-    console.log(colors.blue(err));
-  } else {
-    console.log('document saved to db');
-    newMilestone.resource = user._id;
-    newCheckIn.resource = user._id;
-    newMilestone.save(function(err, milestone) {
-      if (err) {
-        console.log(colors.blue(err));
-      } else {
-        console.log('milestone succesfully saved!');
-        newCheckIn.save(function(err, checkin) {
-          if (err) {
-            console.log(colors.blue(err));
-          } else {
-            console.log('checkin successfully saved!');
-          }
-        });
-      }
-    });
-  }
-});
+// newResource.save(function(err, user){
+//   if(err){
+//     console.log(colors.blue(err));
+//   } else {
+//     console.log('document saved to db');
+//     newMilestone.resource = user._id;
+//     newCheckIn.resource = user._id;
+//     newMilestone.save(function(err, milestone) {
+//       if (err) {
+//         console.log(colors.blue(err));
+//       } else {
+//         console.log('milestone succesfully saved!');
+//         newCheckIn.save(function(err, checkin) {
+//           if (err) {
+//             console.log(colors.blue(err));
+//           } else {
+//             console.log('checkin successfully saved!');
+//           }
+//         });
+//       }
+//     });
+//   }
+// });
 
 module.exports = db;

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const Milestone = require('./milestone.js');
-const CheckIn = require('./check-in.js');
+const CheckIn = require('./checkin.js');
 const Resource = require('./resource.js');
 
 const goalSchema = new Schema({
