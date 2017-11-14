@@ -1,4 +1,4 @@
-const User = require('../databse/models/user.js');
+const User = require('../database/models/user.js');
 const bcrypt = require('bcrypt-nodejs');
 
 exports.signUpUser = (req, res) => {
