@@ -35,6 +35,7 @@ app.use('/api', rootRouter);
 
 // app.post('/signup', handler.signUpUser);
 
+app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.listen(PORT, () => {
   console.log(colors.blue(`Listening on PORT ${PORT}`));
