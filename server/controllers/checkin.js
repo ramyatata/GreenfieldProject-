@@ -1,45 +1,62 @@
 const checkinModel = require('../../database/models/checkin.js');
 const Promise = require('bluebird');
+const colors = require('colors');
 
 module.exports = {
-  //list of goals of particular user
-  list: function(goal) {
+
+  list: function() {
     const promise = new Promise((resolve, reject) => {
-      checkinModel.find({goal: goal}, (err, checkins) => {
+      var myObj = {
+        path: 'resource',
+        model: 'Resource'
+      };
+
+      checkinModel
+      .find({})
+      .populate(myObj)
+      .exec((err, milestones) => {
         if(err) {
-          console.log('failed in list of checkins');
+          console.log('failed in list of milestones');
           reject(err);
         } else {
-          console.log(`checkin:  ${checkins[0]}`);
-          resolve(checkins);
+          resolve(milestones);
         }
       })
     });
+
     return promise;
   },
   get: function(id) {
     const promise = new Promise((resolve, reject) => {
-      checkinModel.findById(id, (err, checkin) => {
+      var myObj = {
+        path: 'resource',
+        model: 'Resource'
+      };
+
+      checkinModel
+      .find({_id: id})
+      .populate(myObj)
+      .exec((err, milestone) => {
         if(err) {
-          console.log('failed in get of checkins');
+          console.log('failed in get of milestones');
           reject(err);
         } else {
-          console.log(`checkin:  ${checkin}`);
-          resolve(checkin);
+          resolve(milestone);
         }
       })
     });
+
     return promise;
   },
   create: function(values) {
     var newCheckin = new checkinModel(values);
+
     const promise = new Promise((resolve, reject) => {
       newCheckin.save((err, newCheck) => {
         if(err) {
           console.log(`error in saving checkin`);
           reject(err);
         } else {
-          console.log(`Checkin saved in db ${newCheck}`);
           resolve(newCheck);
         }
       });
@@ -48,12 +65,11 @@ module.exports = {
   },
   update: function(id, value) {
     const promise = new Promise((resolve, reject) => {
-      checkinModel.findByIdAndUpdate(id, { goal: goal }, (err, updatedCheckin) => {
+      checkinModel.findByIdAndUpdate(id, value, { new: true }, (err, updatedCheckin) => {
         if(err) {
           console.log('failed in update of checkins');
           reject(err);
         } else {
-          console.log(`updatedCheckin:  ${updatedCheckin}`);
           resolve(updatedCheckin);
         }
       })
@@ -67,7 +83,6 @@ module.exports = {
           console.log('failed in delete of checkins');
           reject(err);
         } else {
-          console.log(`deletedCheckin:  ${deletedCheckin}`);
           resolve(deletedCheckin);
         }
       })

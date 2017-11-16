@@ -17,7 +17,6 @@ router.get('/', (req, res) => {
 
 router.get('/:id', (req, res) => {
   let id = req.params.id;
-
   resourceController.get(id)
   .then((results) => {
     res.status(200);
@@ -39,11 +38,14 @@ router.post('/', (req, res) => {
   .catch((err) => {
     throw err;
   })
+
 });
 
 router.put('/:id', (req, res) => {
   let id = req.params.id;
   let body = req.body;
+  console.log(colors.blue(id));
+  console.log(colors.blue(body));
 
   resourceController.update(id, body)
   .then((results) => {

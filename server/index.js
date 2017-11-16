@@ -19,7 +19,6 @@ app.use(morgan('dev'));
 
 app.use('/api', rootRouter);
 
-
 // app.get('/', (req, res) => {
 //   res.end();
 // });

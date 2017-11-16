@@ -30,6 +30,7 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   let body = req.body;
+  console.log(colors.blue(req.body.name));
 
   checkinController.create(body)
   .then((results) => {

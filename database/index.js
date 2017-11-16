@@ -16,24 +16,24 @@ db.on('open', () => {
   console.log( colors.blue('connection success'));
 });
 
-let newMilestone = new Milestone({
-  name: 'Some Milestone',
-  description: 'The description',
-  notes: 'some notes',
-});
+// let newMilestone = new Milestone({
+//   name: 'Some Milestone',
+//   description: 'The description',
+//   notes: 'some notes',
+// });
 
-let newResource = new Resource({
-  title: 'ExampleTitle',
-  description: 'testing',
-  imageRef: 'www.exampleref.com',
-  videoUrl: 'www.exampleref.com'
-});
+// let newResource = new Resource({
+//   title: 'ExampleTitle',
+//   description: 'testing',
+//   imageRef: 'www.exampleref.com',
+//   videoUrl: 'www.exampleref.com'
+// });
 
-let newCheckIn = new CheckIn({
-  name: 'a new check in',
-  description: 'description',
-  notes: 'notes'
-});
+// let newCheckIn = new CheckIn({
+//   name: 'a new check in',
+//   description: 'description',
+//   notes: 'notes'
+// });
 
 // newResource.save(function(err, user){
 //   if(err){

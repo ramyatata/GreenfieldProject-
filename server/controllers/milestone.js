@@ -2,44 +2,60 @@ const milestoneModel = require('../../database/models/milestone.js');
 const Promise = require('bluebird');
 
 module.exports = {
-  //list of goals of particular user
-  list: function(goal) {
+  list: function() {
     const promise = new Promise((resolve, reject) => {
-      milestoneModel.find({goal: goal}, (err, milestones) => {
+
+      var myObj = {
+        path: 'resource',
+        model: 'Resource'
+      };
+
+      milestoneModel
+      .find({})
+      .populate(myObj)
+      .exec((err, milestones) => {
         if(err) {
           console.log('failed in list of milestones');
           reject(err);
         } else {
-          console.log(`milestones:  ${milestones[0]}`);
           resolve(milestones);
         }
       })
     });
+
     return promise;
   },
   get: function(id) {
     const promise = new Promise((resolve, reject) => {
-      milestoneModel.findById(id, (err, milestone) => {
+
+      var myObj = {
+        path: 'resource',
+        model: 'Resource'
+      };
+
+     milestoneModel
+      .find({_id: id})
+      .populate(myObj)
+      .exec((err, milestone) => {
         if(err) {
           console.log('failed in get of milestones');
           reject(err);
         } else {
-          console.log(`milestones:  ${milestone}`);
           resolve(milestone);
         }
       })
     });
+
     return promise;
   },
   create: function(values) {
     var newMilestone = new milestoneModel(values);
     const promise = new Promise((resolve, reject) => {
-      milestoneModel.save((err, newMilestone) => {
+      newMilestone.save((err, newMilestone) => {
         if(err) {
-          console.log(`error in saving newMilestone`);
+          console.log(`failed in saving newMilestone`);
           reject(err);
         } else {
-          console.log(`newMilestone saved in db ${newMilestone}`);
           resolve(newMilestone);
         }
       });
@@ -48,12 +64,11 @@ module.exports = {
   },
   update: function(id, value) {
     const promise = new Promise((resolve, reject) => {
-      milestoneModel.findByIdAndUpdate(id, { goal: goal }, (err, updatedMilestone) => {
+      milestoneModel.findByIdAndUpdate(id, value, { new: true }, (err, updatedMilestone) => {
         if(err) {
           console.log('failed in update of milestones');
           reject(err);
         } else {
-          console.log(`updatedMilestone:  ${updatedMilestone}`);
           resolve(updatedMilestone);
         }
       })
@@ -67,7 +82,6 @@ module.exports = {
           console.log('failed in delete of milestones');
           reject(err);
         } else {
-          console.log(`deletedMilestone:  ${deletedMilestone}`);
           resolve(deletedMilestone);
         }
       })

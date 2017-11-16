@@ -1,17 +1,16 @@
 const resourceModel = require('../../database/models/resource.js');
 const Promise = require('bluebird');
+const colors = require('colors');
 
 module.exports = {
   //list of goals of particular user
-  list: function(goal) {
+  list: function() {
     const promise = new Promise((resolve, reject) => {
       //change filter here
-      resourceModel.find({goal: goal}, (err, resources) => {
+      resourceModel.find({}, (err, resources) => {
         if(err) {
-          console.log('failed in list of resources');
           reject(err);
         } else {
-          console.log(`resources:  ${resources[0]}`);
           resolve(resources);
         }
       })
@@ -22,10 +21,9 @@ module.exports = {
     const promise = new Promise((resolve, reject) => {
       resourceModel.findById(id, (err, resource) => {
         if(err) {
-          console.log('failed in get of resource');
+          console.log(colors.blue('error in get of resource'));
           reject(err);
         } else {
-          console.log(`resource:  ${resource}`);
           resolve(resource);
         }
       })
@@ -37,10 +35,9 @@ module.exports = {
     const promise = new Promise((resolve, reject) => {
       newResource.save((err, newRes) => {
         if(err) {
-          console.log(`error in saving resource`);
+          console.log(colors.blue(`error in saving resource`));
           reject(err);
         } else {
-          console.log(`Resource saved in db ${newRes}`);
           resolve(newRes);
         }
       });
@@ -49,12 +46,11 @@ module.exports = {
   },
   update: function(id, value) {
     const promise = new Promise((resolve, reject) => {
-      resourceModel.findByIdAndUpdate(id, { goal: goal }, (err, updatedResource) => {
+      resourceModel.findByIdAndUpdate(id, value, {new: true}, (err, updatedResource) => {
         if(err) {
-          console.log('failed in update of checkins');
+          console.log(colors.blue('failed in update of resource'));
           reject(err);
         } else {
-          console.log(`updatedResource:  ${updatedResource}`);
           resolve(updatedResource);
         }
       })
@@ -68,7 +64,6 @@ module.exports = {
           console.log('failed in delete of resources');
           reject(err);
         } else {
-          console.log(`deletedResource:  ${deletedResource}`);
           resolve(deletedResource);
         }
       })
