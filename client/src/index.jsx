@@ -8,10 +8,25 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
+import Paper from 'material-ui/Paper';
 
 import AddGoalForm from './components/AddGoalForm.jsx';
+import EditGoalForm from './components/EditGoalForm.jsx';
+import AddMilestoneForm from './components/AddMilestoneForm.jsx';
+import EditMilestoneForm from './components/EditMilestoneForm.jsx';
+import AddCheckinForm from './components/AddCheckinForm.jsx';
+import EditCheckinForm from './components/EditCheckinForm.jsx';
 
-// <AppBar title="Boost" iconElementRight={<AddGoalForm value={this.state.test}/>}/>
+const moduleStyle = {
+  width: '50vw',
+  minWidth: '600px',
+  backgroundColor: 'white',
+  margin: 'auto',
+  color: '#000',
+  maxHeight: '700px',
+  overflow: 'auto'
+}
+
 class App extends React.Component {
   constructor() {
     super();
@@ -22,7 +37,8 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider>
-        <AppBar title="Boost" iconElementRight={<AddGoalForm/>}/>
+        <AppBar title="Boost"/>
+        <Paper style={moduleStyle} zDepth={3} children={<AddGoalForm/>}/>
       </MuiThemeProvider>
     );
   }

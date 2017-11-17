@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import { Grid, Row, Col } from 'react-flexbox-grid';
 
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
@@ -10,6 +9,8 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 import TextField from 'material-ui/TextField';
 import DatePicker from 'material-ui/DatePicker';
 import Toggle from 'material-ui/Toggle';
+import Divider from 'material-ui/Divider';
+import RaisedButton from 'material-ui/RaisedButton';
 
 
 class AddGoalForm extends React.Component {
@@ -50,76 +51,76 @@ class AddGoalForm extends React.Component {
     });
   }
   handleChange(event) {
-    alert(event.target.name, event.target.value);
     this.setState({[event.target.name]: event.target.value});
   }
 
   render() {
-    const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onClick={this.handleClose}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onClick={this.handleClose}
-      />,
-    ];
-
     return (
       <div>
-        <IconButton tooltip="Add Social Event" onClick={this.handleOpen}>
-          <ContentAdd color={"#FFF"}/>
-        </IconButton>
-        <Dialog
-          title="Add New Goal"
-          open={this.state.open}
-          modal={false}
-          onRequestClose={this.handleClose}
-          actions={actions}
-          onChange={this.handleChange}>
+        <div className="col-xs-12"><h3>Add New Goal</h3></div>
           <form>
-            <TextField hintText="Goal Name" fullWidth={true}/><br />
-            <TextField hintText="Description" fullWidth={true}/><br />
-            <TextField hintText="Estimated Hours" fullWidth={true}/><br /><br />
-            <Toggle
-            name="isOpen"
-            value={this.state.isOpen}
-            label="Goal completed"
-            onToggle={this.handleToggle}
-            fullWidth={true}
-            />
-            <DatePicker name="startDate" floatingLabelText="Start Date" onChange={this.handleStartDate} value={this.state.startDate}/>
-            <DatePicker name="endDate" floatingLabelText="Start Date" onChange={this.handleEndDate} value={this.state.endDate}/>
-            <TextField
-              hintText="Notes"
-              multiLine={true}
-              rows={4}
-              rowsMax={8}
-              fullWidth={true}/>
+            <div className="container-fluid">
+              <TextField
+                hintText="Your goal name" floatingLabelText="Name" fullWidth={true}
+              /><br/>
+              <TextField
+                hintText="What do you wana do" floatingLabelText="Description" fullWidth={true}
+              /><br/>
+              <TextField
+                hintText="Estimated Hours to complete goal" floatingLabelText="Hours"
+                fullWidth={true}
+              />
+              <div className="row">
+                <div className="col-xs-6">
+                  <DatePicker
+                    name="startDate" hintText="when are you starting goal"
+                    floatingLabelText="Start Date" onChange={this.handleStartDate}
+                    value={this.state.startDate}
+                  />
+                </div>
+                <div className="col-xs-6">
+                  <DatePicker
+                    name="endDate" hintText="when will you achieve goal"
+                    floatingLabelText="End Date" onChange={this.handleEndDate}
+                    value={this.state.endDate}
+                  />
+                </div>
+              </div>
+              <TextField
+                hintText="Notes" floatingLabelText="Notes" multiLine={true} rows={4} rowsMax={8}
+                fullWidth={true}
+              />
+              <h4>Resource</h4>
+              <TextField
+                hintText="Your Resource name" floatingLabelText="Resource title" fullWidth={true}
+              /><br/>
+              <TextField
+                hintText="Describe your resource" floatingLabelText="Resource Description" fullWidth={true}
+              /><br/>
+              <div className="row">
+                <div className="col-xs-6">
+                  <TextField
+                    hintText="Enter the image/resource url" floatingLabelText="Image url"
+                  />
+                </div>
+                <div className="col-xs-6">
+                  <TextField
+                    hintText="Enter video url" floatingLabelText="Video url"
+                  />
+                  <br/>
+                  <br/>
+                </div>
+              </div>
+            </div>
           </form>
-        </Dialog>
+          <div className="col-xs-12">
+            <RaisedButton className="btn" label="Add Goal" secondary={true}/>
+            <RaisedButton className="btn" label="Cancel" primary={true}/>
+            <br/><br/>
+          </div>
       </div>
     );
   }
 }
-
-
-
-// name: String,
-//   description: String,
-//   startDate: Date,
-//   endDate: Date,
-//   estimatedHours: Number,
-//   estimatedEndDate: Date,
-//   isOpen: {type: Boolean, default: true},
-//   color: String,
-//   dateCreated: {type: Date, default: Date.now},
-//   notes: String,
-//   milestone: [{type: Schema.Types.ObjectId, ref: Milestone}],
-//   checkin: [{type: Schema.Types.ObjectId, ref: CheckIn}],
-//   resource: [{type: Schema.Types.ObjectId, ref: Resource}]
 
 export default AddGoalForm;
