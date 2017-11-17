@@ -35,10 +35,17 @@ class App extends React.Component {
     };
   }
   render() {
+    const addGoal = <AddGoalForm/>;
+    const editGoal = <EditGoalForm/>;
+    const addMilestone = <AddMilestoneForm/>;
+    const EditMilestone = <EditMilestoneForm/>;
+    const addCheckin = <AddCheckinForm/>;
+    const editCheckin = <EditCheckinForm/>;
+
     return (
       <MuiThemeProvider>
         <AppBar title="Boost"/>
-        <Paper style={moduleStyle} zDepth={3} children={<AddGoalForm/>}/>
+        <Paper style={moduleStyle} zDepth={3} children={addGoal}/>
       </MuiThemeProvider>
     );
   }
