@@ -33,9 +33,28 @@ class App extends React.Component {
     this.state = {
       test: true
     };
+
+    this.serviceCreateGoal = this.serviceCreateGoal.bind(this);
   }
+
+  componentDidMount(){
+    services.resource.list()
+  }
+
+  /*******************  services   *******************/
+  /********** Goal ***********/
+  serviceCreateGoal(goal, res){
+    services.goal.create(goal, res, function(err, results){
+      if(err){
+        alert('failed create goal');
+      } else {
+        alert('goal success');
+      }
+    });
+  }
+
   render() {
-    const addGoal = <AddGoalForm/>;
+    const addGoal = <AddGoalForm serviceCreateGoal={this.serviceCreateGoal}/>;
     const editGoal = <EditGoalForm/>;
     const addMilestone = <AddMilestoneForm/>;
     const EditMilestone = <EditMilestoneForm/>;
