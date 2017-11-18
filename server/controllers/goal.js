@@ -131,6 +131,50 @@ module.exports = {
       })
     });
     return promise;
+  },
+  getByUser: function(id) {
+    const promise = new Promise((resolve, reject) => {
+      var populateArr = [
+      {
+        path: 'user',
+        model: 'User',
+        populate: {
+          path: 'resource',
+          model: 'Resource'
+        }
+      }, {
+        path: 'resource',
+        model: 'Resource'
+      }, {
+        path: 'milestone',
+        model: 'Milestone',
+        populate: {
+          path: 'resource',
+          model: 'Resource'
+        }
+      }, {
+        path: 'checkin',
+        model: 'CheckIn',
+        populate: {
+          path: 'resource',
+          model: 'Resource'
+        }
+      }];
+
+      goalModel
+      .find({user: id})
+      .populate(populateArr)
+      .exec((err, milestone) => {
+        if(err) {
+          console.log('failed in get of milestone');
+          reject(err);
+        } else {
+          resolve(milestone);
+        }
+      })
+    });
+
+    return promise;
   }
 };
 

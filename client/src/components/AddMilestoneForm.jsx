@@ -29,9 +29,9 @@ class AddMilestoneForm extends React.Component {
     };
 
     this.handleChange = this.handleChange.bind(this);
-    this.handleCreateMilestone = this.handleCreateMilestone.bind(this);
     this.handleChangeTargetDate = this.handleChangeTargetDate.bind(this);
     this.handleChangeCompleteDate = this.handleChangeCompleteDate.bind(this);
+    this.handleCreateMilestone = this.handleCreateMilestone.bind(this);
   }
 
   handleChange(event) {

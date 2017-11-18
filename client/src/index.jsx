@@ -33,10 +33,12 @@ class App extends React.Component {
     super();
     this.state = {
       checkin: {},
-      milestone: {}
+      milestone: {},
+      goal: {},
+      goals: [],
+      user: '5a0cf626b2b4744472a2d5a7'
     };
-    //goals
-    this.serviceCreateGoal = this.serviceCreateGoal.bind(this);
+
     //checkins
     this.serviceCreateCheckin = this.serviceCreateCheckin.bind(this);
     this.serviceGetCheckin = this.serviceGetCheckin.bind(this);
@@ -47,6 +49,13 @@ class App extends React.Component {
     this.serviceGetMilestone = this.serviceGetMilestone.bind(this);
     this.serviceUpdateMilestone = this.serviceUpdateMilestone.bind(this);
     this.serviceDeleteMilestone = this.serviceDeleteMilestone.bind(this);
+    //goals
+    this.serviceCreateGoal = this.serviceCreateGoal.bind(this);
+    this.serviceGetGoal = this.serviceGetGoal.bind(this);
+    this.serviceUpdateGoal = this.serviceUpdateGoal.bind(this);
+    this.serviceDeleteGoal = this.serviceDeleteGoal.bind(this);
+    //goals of user
+    this.serviceListUserGoals = this.serviceListUserGoals.bind(this);
 
   }
 
@@ -55,17 +64,64 @@ class App extends React.Component {
 
     //working
     //this.serviceGetCheckin('5a0f6e520c18496660c36582');
-    this.serviceGetMilestone('5a0f97c9a48bd76dcf5646ae');
+    //this.serviceGetMilestone('5a0f97c9a48bd76dcf5646ae');
+    //this.serviceGetGoal('5a0fbaff32657970852b7ea4');
+    this.serviceListUserGoals('5a0cf626b2b4744472a2d5a7');
+
   }
 
   /*******************  services   *******************/
+  /********** Goals of particular user ***********/
+  serviceListUserGoals(userId) {
+    services.goal.listByUser(userId, (err, results) => {
+      if(err){
+        console.log('failed in get goals of user');
+      } else {
+        this.setState({goals: results});
+        console.log(results);
+        console.log('success in get goals of user');
+      }
+    });
+  }
   /********** Goal ***********/
-  serviceCreateGoal(goal, res){
+  serviceCreateGoal(goal, res) {
     services.goal.create(goal, res, (err, results) => {
       if(err){
-        alert('failed create goal');
+        console.log('failed create goal');
       } else {
-        alert('goal success');
+        //TODO - close add screen and clear fields
+        console.log('goal creation success');
+      }
+    });
+  }
+  serviceGetGoal(id){
+    services.goal.get(id, (err, results) => {
+      if(err){
+        console.log('failed retrieving Goal and its resource');
+      } else {
+        this.setState({'goal': results});
+      }
+    });
+  }
+  serviceUpdateGoal(goalId, goalBody, resourceId, resourceBody){
+    services.goal.update(goalId, goalBody, resourceId, resourceBody,
+      function(err, results){
+        if(err){
+          console.log('failed updating Goal and resource');
+        } else {
+          //TODO - close edit screen and clear fields
+          console.log('success updating Goal and resource successfully');
+        }
+      }
+    );
+  }
+  serviceDeleteGoal(goalId, resourceId){
+    services.goal.delete(goalId, resourceId, function(err, results){
+      if(err){
+        console.log('failed deleting Goal and resource');
+      } else {
+        //TODO - close edit screen and clear fields
+        console.log('success deleting Goal and resource');
       }
     });
   }
@@ -159,8 +215,10 @@ class App extends React.Component {
 
 
   render() {
-    let addGoal = <AddGoalForm serviceCreateGoal={this.serviceCreateGoal}/>;
-    let editGoal = <EditGoalForm/>;
+    let addGoal = <AddGoalForm serviceCreateGoal={this.serviceCreateGoal} user={this.state.user}/>;
+    let editGoal = <EditGoalForm goal={this.state.goal}
+                      serviceUpdateGoal={this.serviceUpdateGoal}
+                      serviceDeleteGoal={this.serviceDeleteGoal}/>;
 
     let addMilestone = <AddMilestoneForm serviceCreateMilestone={this.serviceCreateMilestone}/>;
     let editMilestone = <EditMilestoneForm milestone={this.state.milestone}
@@ -176,7 +234,7 @@ class App extends React.Component {
       <MuiThemeProvider>
         <div>
           <AppBar title="Boost"/>
-          <Paper style={moduleStyle} zDepth={3} children={editMilestone}/>
+          <Paper style={moduleStyle} zDepth={3} children={editGoal}/>
         </div>
       </MuiThemeProvider>
     );

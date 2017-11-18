@@ -67,24 +67,28 @@ class AddCheckinForm extends React.Component {
                 fullWidth={true}
               />
               <h4>Resource</h4>
-              <TextField name="title" value={this.state.title} onChange = {this.handleChange}
-                hintText="Your Resource name" floatingLabelText="Resource title" fullWidth={true}
-              /><br/>
-              <TextField name="res_description" value={this.state.res_description}
-                onChange = {this.handleChange}
-                hintText="Describe your resource" floatingLabelText="Resource Description" fullWidth={true}
-              /><br/>
+
+
               <div className="row">
                 <div className="col-xs-6">
+                  <TextField name="title" value={this.state.title} onChange = {this.handleChange}
+                    hintText="Your Resource name" floatingLabelText="Resource title"
+                    fullWidth={true}
+                  /><br/>
                   <TextField name="imageRef" value={this.state.imageRef}
                     onChange = {this.handleChange}
                     hintText="Enter the image/resource url" floatingLabelText="Image url"
+                    fullWidth={true}
                   />
                 </div>
                 <div className="col-xs-6">
+                  <TextField name="res_description" value={this.state.res_description}
+                    onChange = {this.handleChange}
+                    hintText="Describe your resource" floatingLabelText="Resource Description" fullWidth={true} multiLine={true} rowsMax={2}
+                  /><br/>
                   <TextField name="videoUrl" value={this.state.videoUrl}
                     onChange = {this.handleChange}
-                    hintText="Enter video url" floatingLabelText="Video url"
+                    hintText="Enter video url" floatingLabelText="Video url" fullWidth={true}
                   />
                   <br/>
                   <br/>

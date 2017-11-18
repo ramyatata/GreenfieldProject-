@@ -19,7 +19,7 @@ const goalSchema = new Schema({
   notes: String,
   milestone: [{type: Schema.Types.ObjectId, ref: Milestone}],
   checkin: [{type: Schema.Types.ObjectId, ref: CheckIn}],
-  resource: [{type: Schema.Types.ObjectId, ref: Resource}]
+  resource: {type: Schema.Types.ObjectId, ref: Resource}
 });
 
 const Goal = mongoose.model('Goal', goalSchema);

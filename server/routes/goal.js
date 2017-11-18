@@ -6,7 +6,6 @@ const goalController = require('../controllers/goal.js');
 
 /*************** Goal Routes  *************/
 router.get('/', (req, res) => {
-  console.log(colors.blue('in goal router'));
   goalController.list()
   .then((results) => {
     res.status(200);
@@ -21,6 +20,19 @@ router.get('/:id', (req, res) => {
   let id = req.params.id;
 
   goalController.get(id)
+  .then((results) => {
+    res.status(200);
+    res.json(results);
+  })
+  .catch((err) => {
+    throw err;
+  })
+});
+
+router.get('/user/:id', (req, res) => {
+  let userId = req.params.id;
+
+  goalController.getByUser(userId)
   .then((results) => {
     res.status(200);
     res.json(results);

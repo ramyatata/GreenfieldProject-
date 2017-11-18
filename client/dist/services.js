@@ -50,10 +50,13 @@ window.services = {
             callback(err, null)
           } else {
             newGoal.resource = results._id;
+            // newGoal.milestone = '5a0f89e544385b6ac8faf2ea';
+            // newGoal.checkin = '5a0f3c2367a43c60928862ef';
+            // newGoal.user = '5a0cf626b2b4744472a2d5a7';
+
             console.log('creating new goal:', newGoal);
             axios.post('http://localhost:3030/api/goals/', newGoal)
             .then(function(response){
-              alert("created goal");
               callback(null, response.data);
             })
             .catch(function(error){
@@ -63,8 +66,60 @@ window.services = {
           }
         });
       }
+    },
+    get: function(id, callback){
+      axios.get('http://localhost:3030/api/goals/'+ id)
+      .then(function(response) {
+        callback(null, response.data[0]);
+      })
+      .catch(function(error){
+        alert("failed in goal get");
+        callback(error, null);
+      })
+    },
+    delete: function(goalId, resId, callback){
+      services.resource.delete(resId, function(err, results){
+        if(err){
+          console.log('Failed in goal delete - resource delete');
+          callback(err, null);
+        } else {
+          axios.delete('http://localhost:3030/api/goals/'+ goalId)
+          .then(function(response) {
+            callback(null, response.data);
+          })
+          .catch(function(error){
+            callback(error, null);
+          })
+        }
+      })
+    },
+    update: function(goalID, goalBody, resId, resBody, callback){
+      services.resource.update(resId, resBody, function(err, results){
+        if(err){
+          console.log('Failed in goal - resource update');
+          callback(err, null);
+        } else {
+          axios.put('http://localhost:3030/api/goals/'+ goalID, goalBody)
+          .then(function(response) {
+            callback(null, response.data);
+          })
+          .catch(function(error){
+            callback(error, null);
+          })
+        }
+      });
+    },
+    listByUser: function(userId, callback){
+      axios.get('http://localhost:3030/api/goals/user/'+ userId)
+      .then(function(response) {
+        callback(null, response.data);
+      })
+      .catch(function(error){
+        callback(error, null);
+      })
     }
   },
+
   checkin: {
     //creates resource and then creates checkin
     create: function(newCheckin, newRes, callback){
@@ -103,12 +158,9 @@ window.services = {
         } else {
           axios.delete('http://localhost:3030/api/checkins/'+ checkinId)
           .then(function(response) {
-              console.log('checkin delete success');
-              console.log(response);
-           // callback(null, response.data);
+            callback(null, response.data);
           })
           .catch(function(error){
-            alert("failed in checkin delete");
             callback(error, null);
           })
         }

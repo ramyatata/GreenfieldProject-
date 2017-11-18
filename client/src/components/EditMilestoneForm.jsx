@@ -70,8 +70,6 @@ class EditMilestoneForm extends React.Component {
 
   /*****************. handlers **************/
   handleChange(event) {
-    alert(event.target.name);
-    alert(event.target.value);
     this.setState({[event.target.name]: event.target.value});
   }
   handleChangeTargetDate(event, date){
@@ -157,6 +155,7 @@ class EditMilestoneForm extends React.Component {
                 onChange = {this.handleChangeCompleteDate}
                 hintText="Date you completed the milestone"
                 floatingLabelText="Completed Date"
+                fullWidth={true}
               />
             </div>
             <TextField name="description" value={this.state.description}
@@ -177,6 +176,7 @@ class EditMilestoneForm extends React.Component {
                 <TextField name="imageRef" value={this.state.imageRef}
                   onChange = {this.handleChange}
                   hintText="Enter the image/resource url" floatingLabelText="Image url"
+                  fullWidth={true}
                 />
               </div>
               <div className="col-xs-6">
@@ -188,6 +188,7 @@ class EditMilestoneForm extends React.Component {
                 <TextField name="videoUrl" value={this.state.videoUrl}
                   onChange = {this.handleChange}
                   hintText="Enter video url" floatingLabelText="Video url"
+                  fullWidth={true}
                 />
               </div>
             </div>
