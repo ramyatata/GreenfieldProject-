@@ -52,7 +52,10 @@ class App extends React.Component {
 
   componentDidMount(){
     //services.resource.list(function(err, results){});
-    this.serviceGetCheckin('5a0f6e520c18496660c36582');
+
+    //working
+    //this.serviceGetCheckin('5a0f6e520c18496660c36582');
+    this.serviceGetMilestone('5a0f97c9a48bd76dcf5646ae');
   }
 
   /*******************  services   *******************/
@@ -102,10 +105,10 @@ class App extends React.Component {
   serviceDeleteCheckin(checkinId, resourceId){
     services.checkin.delete(checkinId, resourceId, function(err, results){
       if(err){
-        alert('failed deleting checkin and resource');
+        console.log('failed deleting checkin and resource');
       } else {
         //TODO - close edit screen and clear fields
-        alert('success deleting checkin and resource');
+        console.log('success deleting checkin and resource');
       }
     });
   }
@@ -126,6 +129,7 @@ class App extends React.Component {
       if(err){
         console.log('failed retrieving milestone and its resource');
       } else {
+        console.log(results);
         this.setState({'milestone': results});
       }
     });
@@ -158,8 +162,8 @@ class App extends React.Component {
     let addGoal = <AddGoalForm serviceCreateGoal={this.serviceCreateGoal}/>;
     let editGoal = <EditGoalForm/>;
 
-    let addMilestone = <AddMilestoneForm serviceCreateCheckin={this.serviceCreateMilestone}/>;
-    let EditMilestone = <EditMilestoneForm milestone={this.state.milestone}
+    let addMilestone = <AddMilestoneForm serviceCreateMilestone={this.serviceCreateMilestone}/>;
+    let editMilestone = <EditMilestoneForm milestone={this.state.milestone}
                         serviceUpdateMilestone={this.serviceUpdateMilestone}
                         serviceDeleteMilestone={this.serviceDeleteMilestone}/>;
 
@@ -172,7 +176,7 @@ class App extends React.Component {
       <MuiThemeProvider>
         <div>
           <AppBar title="Boost"/>
-          <Paper style={moduleStyle} zDepth={3} children={addMilestone}/>
+          <Paper style={moduleStyle} zDepth={3} children={editMilestone}/>
         </div>
       </MuiThemeProvider>
     );

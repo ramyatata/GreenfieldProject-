@@ -19,7 +19,7 @@ class AddMilestoneForm extends React.Component {
     this.state = {
       name: '',
       description: '',
-      targetDate: '',
+      targetDate: new Date(),
       dateCompleted: '',
       notes: '',
       title: '',
@@ -42,6 +42,7 @@ class AddMilestoneForm extends React.Component {
       targetDate: date
     });
   }
+
   handleChangeCompleteDate(event, date){
     this.setState({
       dateCompleted: date
@@ -70,54 +71,51 @@ class AddMilestoneForm extends React.Component {
         <div className="col-xs-12"><h3>Add New Milestone</h3></div>
           <form>
             <div className="container-fluid">
-              <TextField name="name" value={this.state.name} onChange={this.changeHanlder}
-                hintText="Your Milestone name" floatingLabelText="Name" fullWidth={true}
-              /><br/>
+              <div className="row">
+                <div className="col-xs-6">
+                  <TextField name="name" value={this.state.name} onChange={this.handleChange}
+                    hintText="Your Milestone name" floatingLabelText="Name" fullWidth={true}
+                  />
+                </div>
+                <div className="col-xs-6">
+                  <DatePicker name="targetDate" value={this.state.targetDate}
+                    onChange = {this.handleChangeTargetDate}
+                    hintText="when will you achieve mile stone"
+                    floatingLabelText="Target Date" fullWidth={true}
+                  />
+                </div>
+              </div>
               <TextField name="description" value={this.state.description}
                 onChange = {this.handleChange}
                 hintText="What do you wana do" floatingLabelText="Description" fullWidth={true}
-              /><br/>
+              />
+
               <TextField name="notes" value={this.state.notes}
                 onChange = {this.handleChange}
                 hintText="Notes" floatingLabelText="Notes" multiLine={true} rows={2} rowsMax={4}
                 fullWidth={true}
               />
-              <div className="row">
-                <div className="col-xs-6">
-                  <DatePicker name="targetDate" value={this.state.targetDate}
-                    onChange = {this.handleChangeTargetDate}
-                    hintText="when will you achieve mile stone"
-                    floatingLabelText="Target Date" onChange={this.handleStartDate}
-                    value={this.state.startDate}
-                  />
-                </div>
-                <div className="col-xs-6">
-                  <DatePicker name="dateCompleted" value={this.state.dateCompleted}
-                    onChange = {this.handleChangeCompleteDate}
-                    hintText="when you achieved milestone"
-                    floatingLabelText="Completion Date" onChange={this.handleEndDate}
-                    value={this.state.endDate}
-                  />
-                </div>
-              </div>
               <h4>Resource</h4>
-              <TextField name="title" value={this.state.title} onChange = {this.handleChange}
-                hintText="Your Resource name" floatingLabelText="Resource title" fullWidth={true}
-              /><br/>
-              <TextField name="res_description" value={this.state.res_description}
-                onChange = {this.handleChange}
-                hintText="Describe your resource" floatingLabelText="Resource Description" fullWidth={true}
-              /><br/>
+
+
               <div className="row">
                 <div className="col-xs-6">
+                  <TextField name="title" value={this.state.title} onChange = {this.handleChange}
+                    hintText="Your Resource name" floatingLabelText="Resource title"
+                    fullWidth={true}
+                  /><br/>
                   <TextField name="imageRef" value={this.state.imageRef}
-                    onChange = {this.handleChange}
+                    onChange = {this.handleChange} fullWidth={true}
                     hintText="Enter the image/resource url" floatingLabelText="Image url"
                   />
                 </div>
                 <div className="col-xs-6">
-                  <TextField name="videoUrl" value={this.state.videoUrl}
+                  <TextField name="res_description" value={this.state.res_description}
                     onChange = {this.handleChange}
+                    hintText="Describe your resource" floatingLabelText="Resource Description"fullWidth={true} multiLine={true} rowsMax={2}
+                  /><br/>
+                  <TextField name="videoUrl" value={this.state.videoUrl}
+                    onChange = {this.handleChange} fullWidth={true}
                     hintText="Enter video url" floatingLabelText="Video url"
                   />
                   <br/>

@@ -4,7 +4,6 @@ window.services = {
     create: function(newRes, callback) {
       axios.post('http://localhost:3030/api/resources/', newRes)
       .then(function(response) {
-        alert('resource created successfully!');
         callback(null, response.data);
       })
       .catch(function(error){
