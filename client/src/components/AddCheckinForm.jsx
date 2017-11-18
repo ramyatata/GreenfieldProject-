@@ -16,39 +16,74 @@ import RaisedButton from 'material-ui/RaisedButton';
 class AddCheckinForm extends React.Component {
   constructor() {
     super();
-    this.state = {};
+    this.state = {
+      name: '',
+      description: '',
+      notes: '',
+      title: '',
+      res_description: '',
+      imageRef: '',
+      videoUrl: ''
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleCreateCheckin = this.handleCreateCheckin.bind(this);
   }
+
+  handleChange(event) {
+    this.setState({[event.target.name]: event.target.value});
+  }
+  handleCreateCheckin(event){
+    const checkin = {
+      name: this.state.name,
+      description: this.state.description,
+      notes: this.state.notes
+    };
+    const resource = {
+      title: this.state.title,
+      description: this.state.res_description,
+      imageRef: this.state.imageRef,
+      videoUrl: this.state.videoUrl
+    }
+    this.props.serviceCreateCheckin(checkin, resource);
+  }
+
   render(){
    return (
       <div>
         <div className="col-xs-12"><h3>Add New Checkin</h3></div>
           <form>
             <div className="container-fluid">
-              <TextField
+              <TextField name="name" value={this.state.name} onChange = {this.handleChange}
                 hintText="Your Checkin name" floatingLabelText="Name" fullWidth={true}
               /><br/>
-              <TextField
+              <TextField name="description" value={this.state.description}
+                onChange = {this.handleChange}
                 hintText="What do you want to checkin" floatingLabelText="Description" fullWidth={true}
               /><br/>
-              <TextField
-                hintText="Notes" floatingLabelText="Notes" multiLine={true} rows={4} rowsMax={8}
+              <TextField name="notes" value={this.state.notes}
+                onChange = {this.handleChange}
+                hintText="Notes" floatingLabelText="Notes" multiLine={true} rows={2} rowsMax={4}
                 fullWidth={true}
               />
               <h4>Resource</h4>
-              <TextField
+              <TextField name="title" value={this.state.title} onChange = {this.handleChange}
                 hintText="Your Resource name" floatingLabelText="Resource title" fullWidth={true}
               /><br/>
-              <TextField
+              <TextField name="res_description" value={this.state.res_description}
+                onChange = {this.handleChange}
                 hintText="Describe your resource" floatingLabelText="Resource Description" fullWidth={true}
               /><br/>
               <div className="row">
                 <div className="col-xs-6">
-                  <TextField
+                  <TextField name="imageRef" value={this.state.imageRef}
+                    onChange = {this.handleChange}
                     hintText="Enter the image/resource url" floatingLabelText="Image url"
                   />
                 </div>
                 <div className="col-xs-6">
-                  <TextField
+                  <TextField name="videoUrl" value={this.state.videoUrl}
+                    onChange = {this.handleChange}
                     hintText="Enter video url" floatingLabelText="Video url"
                   />
                   <br/>
@@ -58,7 +93,8 @@ class AddCheckinForm extends React.Component {
             </div>
           </form>
           <div className="col-xs-12">
-            <RaisedButton className="btn" label="Add Checkin" secondary={true}/>
+            <RaisedButton className="btn" label="Add Checkin" secondary={true}
+              onClick={this.handleCreateCheckin}/>
             <RaisedButton className="btn" label="Cancel" primary={true}/>
             <br/><br/>
           </div>

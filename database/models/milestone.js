@@ -13,8 +13,6 @@ const milestoneSchema = new Schema({
   resource: [{type: Schema.Types.ObjectId, ref: Resource}]
 });
 
-
-
 const Milestone = mongoose.model('Milestone', milestoneSchema);
 
 module.exports = Milestone;

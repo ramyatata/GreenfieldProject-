@@ -18,6 +18,7 @@ import AddCheckinForm from './components/AddCheckinForm.jsx';
 import EditCheckinForm from './components/EditCheckinForm.jsx';
 
 const moduleStyle = {
+  marginTop: '20px',
   width: '50vw',
   minWidth: '600px',
   backgroundColor: 'white',
@@ -31,20 +32,33 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      test: true
+      checkin: {},
+      milestone: {}
     };
-
+    //goals
     this.serviceCreateGoal = this.serviceCreateGoal.bind(this);
+    //checkins
+    this.serviceCreateCheckin = this.serviceCreateCheckin.bind(this);
+    this.serviceGetCheckin = this.serviceGetCheckin.bind(this);
+    this.serviceUpdateCheckin = this.serviceUpdateCheckin.bind(this);
+    this.serviceDeleteCheckin = this.serviceDeleteCheckin.bind(this);
+    //milestones
+    this.serviceCreateMilestone = this.serviceCreateMilestone.bind(this);
+    this.serviceGetMilestone = this.serviceGetMilestone.bind(this);
+    this.serviceUpdateMilestone = this.serviceUpdateMilestone.bind(this);
+    this.serviceDeleteMilestone = this.serviceDeleteMilestone.bind(this);
+
   }
 
   componentDidMount(){
-    services.resource.list()
+    //services.resource.list(function(err, results){});
+    this.serviceGetCheckin('5a0f6e520c18496660c36582');
   }
 
   /*******************  services   *******************/
   /********** Goal ***********/
   serviceCreateGoal(goal, res){
-    services.goal.create(goal, res, function(err, results){
+    services.goal.create(goal, res, (err, results) => {
       if(err){
         alert('failed create goal');
       } else {
@@ -53,18 +67,113 @@ class App extends React.Component {
     });
   }
 
+  /********** Checkin ***********/
+  serviceCreateCheckin(checkin, res){
+    services.checkin.create(checkin, res, (err, results) => {
+      if(err){
+        console.log('failed creating checking and resource');
+      } else {
+        //TODO - close add screen and clear fields
+        console.log('created resource and checkin successfully');
+      }
+    });
+  }
+  serviceGetCheckin(id){
+    services.checkin.get(id, (err, results) => {
+      if(err){
+        console.log('failed retrieving checking and its resource');
+      } else {
+        this.setState({'checkin': results});
+      }
+    });
+  }
+  serviceUpdateCheckin(checkinId, checkinBody, resourceId, resourceBody){
+    services.checkin.update(checkinId, checkinBody, resourceId, resourceBody,
+      function(err, results){
+        if(err){
+          console.log('failed updating checking and resource');
+        } else {
+          //TODO - close edit screen and clear fields
+          console.log('success updating checkin and resource successfully');
+        }
+      }
+    );
+  }
+  serviceDeleteCheckin(checkinId, resourceId){
+    services.checkin.delete(checkinId, resourceId, function(err, results){
+      if(err){
+        alert('failed deleting checkin and resource');
+      } else {
+        //TODO - close edit screen and clear fields
+        alert('success deleting checkin and resource');
+      }
+    });
+  }
+
+  /********** Milestone ***********/
+  serviceCreateMilestone(milestone, res){
+    services.milestone.create(milestone, res, (err, results) => {
+      if(err){
+        console.log('failed creating milestone and resource');
+      } else {
+        //TODO - close add screen and clear fields
+        console.log('created resource and milestone successfully');
+      }
+    });
+  }
+  serviceGetMilestone(id){
+    services.milestone.get(id, (err, results) => {
+      if(err){
+        console.log('failed retrieving milestone and its resource');
+      } else {
+        this.setState({'milestone': results});
+      }
+    });
+  }
+  serviceUpdateMilestone(milestoneId, milestoneBody, resourceId, resourceBody){
+    services.milestone.update(milestoneId, milestoneBody, resourceId, resourceBody,
+      function(err, results){
+        if(err){
+          console.log('failed updating milestone and resource');
+        } else {
+          //TODO - close edit screen and clear fields
+          console.log('success updating milestone and resource successfully');
+        }
+      }
+    );
+  }
+  serviceDeleteMilestone(milestoneId, resourceId){
+    services.milestone.delete(milestoneId, resourceId, function(err, results){
+      if(err){
+        alert('failed deleting milestone and resource');
+      } else {
+        //TODO - close edit screen and clear fields
+        alert('success deleting milestone and resource');
+      }
+    });
+  }
+
+
   render() {
-    const addGoal = <AddGoalForm serviceCreateGoal={this.serviceCreateGoal}/>;
-    const editGoal = <EditGoalForm/>;
-    const addMilestone = <AddMilestoneForm/>;
-    const EditMilestone = <EditMilestoneForm/>;
-    const addCheckin = <AddCheckinForm/>;
-    const editCheckin = <EditCheckinForm/>;
+    let addGoal = <AddGoalForm serviceCreateGoal={this.serviceCreateGoal}/>;
+    let editGoal = <EditGoalForm/>;
+
+    let addMilestone = <AddMilestoneForm serviceCreateCheckin={this.serviceCreateMilestone}/>;
+    let EditMilestone = <EditMilestoneForm milestone={this.state.milestone}
+                        serviceUpdateMilestone={this.serviceUpdateMilestone}
+                        serviceDeleteMilestone={this.serviceDeleteMilestone}/>;
+
+    let addCheckin = <AddCheckinForm serviceCreateCheckin={this.serviceCreateCheckin}/>;
+    let editCheckin = <EditCheckinForm checkin={this.state.checkin}
+                        serviceUpdateCheckin={this.serviceUpdateCheckin}
+                        serviceDeleteCheckin={this.serviceDeleteCheckin}/>;
 
     return (
       <MuiThemeProvider>
-        <AppBar title="Boost"/>
-        <Paper style={moduleStyle} zDepth={3} children={addGoal}/>
+        <div>
+          <AppBar title="Boost"/>
+          <Paper style={moduleStyle} zDepth={3} children={addMilestone}/>
+        </div>
       </MuiThemeProvider>
     );
   }

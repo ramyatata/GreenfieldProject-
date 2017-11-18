@@ -22,46 +22,83 @@ import Delete from 'material-ui/svg-icons/Action/delete';
 
 
 class EditMilestoneForm extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
     this.state = {
-      open: false,
-      isOpen: true,
-      startDate: '',
-      endDate: ''
+      id: '',
+      name: '',
+      description: '',
+      targetDate: '',
+      dateCompleted: '',
+      notes: '',
+      isOpen: '',
+      resourceId: '',
+      title: '',
+      res_description: '',
+      imageRef: '',
+      videoUrl: ''
     };
 
-    this.handleOpen = this.handleOpen.bind(this);
-    this.handleClose = this.handleClose.bind(this);
-    this.handleToggle = this.handleToggle.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.handleStartDate = this.handleStartDate.bind(this);
-    this.handleEndDate = this.handleEndDate.bind(this);
+    this.handleChangeTargetDate = this.handleChangeTargetDate.bind(this);
+    this.handleChangeCompleteDate = this.handleChangeCompleteDate.bind(this);
+    this.handleUpdateMilestone = this.handleUpdateMilestone.bind(this);
+    this.handleDeleteMilestone = this.handleDeleteMilestone.bind(this);
   }
 
-  handleOpen(){
-    this.setState({open: true});
-  }
-  handleClose(){
-    this.setState({open: false});
-  }
-  handleToggle(event, toggled){
-    this.state({[event.target.name]: !toggled});
-  }
-  handleStartDate(event, date){
+  /************* lifecycle methods ****************/
+  componentWillReceiveProps(nextProps){
     this.setState({
-      startDate: date
+      id: nextProps.milestone._id,
+      name: nextProps.milestone.name,
+      description: nextProps.milestone.description,
+      notes: nextProps.milestone.notes,
+      targetDate: nextProps.milestone.targetDate,
+      isOpen: nextProps.milestone.isOpen,
+      dateCompleted: nextProps.milestone.dateCompleted,
+      resourceId: nextProps.milestone.resource === undefined ? '': nextProps.milestone.resource[0]._id,
+      title: nextProps.milestone.resource === undefined ? '' : nextProps.milestone.resource[0].title,
+      res_description: nextProps.milestone.resource === undefined ? '' : nextProps.milestone.resource[0].description,
+      imageRef: nextProps.milestone.resource === undefined ? '' : nextProps.milestone.resource[0].imageRef,
+      videoUrl: nextProps.milestone.resource === undefined ? '' : nextProps.milestone.resource[0].videoUrl
     });
   }
-  handleEndDate(event, date){
-    this.setState({
-      endDate: date
-    });
-  }
+
+  /*****************. handlers **************/
   handleChange(event) {
     this.setState({[event.target.name]: event.target.value});
   }
-
+  handleChangeTargetDate(event, date){
+    this.setState({
+      targetDate: date
+    });
+  }
+  handleChangeCompleteDate(event, date){
+    this.setState({
+      dateCompleted: date
+    });
+  }
+  handleUpdateMilestone(event){
+    const milestone = {
+      name: this.state.name,
+      description: this.state.description,
+      notes: this.state.notes,
+      isOpen: this.state.isOpen,
+      targetDate: this.state.targetDate,
+      dateCompleted: this.state.dateCompleted
+    };
+    const resource = {
+      title: this.state.title,
+      description: this.state.res_description,
+      imageRef: this.state.imageRef,
+      videoUrl: this.state.videoUrl
+    }
+    this.props.serviceUpdateMilestone(this.state.id, milestone, this.state.resourceId, resource);
+  }
+  handleDeleteMilestone(){
+    this.props.serviceDeleteMilestone(this.state.id, this.state.resourceId);
+  }
   render() {
     const deleteButtonStyle = {
       marginTop: '10px',
@@ -72,59 +109,67 @@ class EditMilestoneForm extends React.Component {
         <div className="col-xs-12">
          <h3 className="col-xs-11">Edit Milestone</h3>
          <div className="col-xs-1">
-           <FloatingActionButton mini={true} style={deleteButtonStyle}><Delete/></FloatingActionButton>
+          <FloatingActionButton mini={true} style={deleteButtonStyle}><Delete/></FloatingActionButton>
          </div>
          </div>
         <form>
           <div className="container-fluid">
-            <TextField
+            <TextField name="name" value={this.state.name} onChange={this.changeHanlder}
               hintText="Your Milestone name" floatingLabelText="Name" fullWidth={true}
             /><br/>
-            <TextField
+            <TextField name="description" value={this.state.description}
+              onChange = {this.handleChange}
               hintText="What do you wana do" floatingLabelText="Description" fullWidth={true}
             /><br/>
-            <SelectField
-              floatingLabelText="Milestone Completed?" value={this.state.value}
-              onChange={this.handleChange} fullWidth={true}>
+            <SelectField name="description" value={this.state.description}
+              onChange = {this.handleChange}
+              floatingLabelText="Milestone Completed?" fullWidth={true}>
               <MenuItem value={null} primaryText="" />
               <MenuItem value={false} primaryText="No" />
               <MenuItem value={true} primaryText="Yes" />
             </SelectField>
             <div className="row">
               <div className="col-xs-6">
-                <DatePicker
+                <DatePicker name="targetDate" value={this.state.targetDate}
+                  onChange = {this.handleChangeTargetDate}
                   name="targetDate" hintText="what is your target date to complete"
                   floatingLabelText="Target Date" onChange={this.handleStartDate}
                   value={this.state.startDate}
                 />
               </div>
               <div className="col-xs-6">
-                <DatePicker
+                <DatePicker name="dateCompleted" value={this.state.dateCompleted}
+                  onChange = {this.handleChangeCompleteDate}
                   name="endDate" hintText="Date you completed the milestone"
-                  floatingLabelText="Completed Date" onChange={this.handleEndDate} value={this.state.endDate}
+                  floatingLabelText="Completed Date" onChange={this.handleEndDate}
                 />
               </div>
             </div>
-            <TextField
+            <TextField name="notes" value={this.state.notes}
+              onChange = {this.handleChange}
               hintText="Notes" floatingLabelText="Notes" multiLine={true} rows={3} rowsMax={5}
               fullWidth={true}
             /><br/>
 
             <h4>Resource</h4>
-             <TextField
+             <TextField name="title" value={this.state.title} onChange={this.handleChange}
               hintText="Your Resource name" floatingLabelText="Resource title" fullWidth={true}
             /><br/>
-            <TextField
-              hintText="Describe your resource" floatingLabelText="Resource Description" fullWidth={true}
+            <TextField name="res_description" value={this.state.res_description}
+              onChange = {this.handleChange}
+              hintText="Describe your resource" floatingLabelText="Resource Description"
+              fullWidth={true}
             /><br/>
             <div className="row">
               <div className="col-xs-6">
-                <TextField
+                <TextField name="imageRef" value={this.state.imageRef}
+                  onChange = {this.handleChange}
                   hintText="Enter the image/resource url" floatingLabelText="Image url"
                 />
               </div>
               <div className="col-xs-6">
-                <TextField
+                <TextField name="videoUrl" value={this.state.videoUrl}
+                  onChange = {this.handleChange}
                   hintText="Enter video url" floatingLabelText="Video url"
                 />
               </div>

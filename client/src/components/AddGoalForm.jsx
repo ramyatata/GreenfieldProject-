@@ -14,8 +14,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 
 class AddGoalForm extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       user: '',
       name: '',
