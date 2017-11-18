@@ -9,6 +9,8 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import AppBar from 'material-ui/AppBar';
 import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
 
 import AddGoalForm from './components/AddGoalForm.jsx';
 import EditGoalForm from './components/EditGoalForm.jsx';
@@ -16,6 +18,11 @@ import AddMilestoneForm from './components/AddMilestoneForm.jsx';
 import EditMilestoneForm from './components/EditMilestoneForm.jsx';
 import AddCheckinForm from './components/AddCheckinForm.jsx';
 import EditCheckinForm from './components/EditCheckinForm.jsx';
+
+//pop over action
+import Popover, {PopoverAnimationVertical} from 'material-ui/Popover';
+import Menu from 'material-ui/Menu';
+import MenuItem from 'material-ui/MenuItem';
 
 const moduleStyle = {
   marginTop: '20px',
@@ -25,7 +32,9 @@ const moduleStyle = {
   margin: 'auto',
   color: '#000',
   maxHeight: '700px',
-  overflow: 'auto'
+  overflow: 'auto',
+  displayForm: '',
+  menuOpen: true
 }
 
 class App extends React.Component {
@@ -55,17 +64,22 @@ class App extends React.Component {
     this.serviceUpdateGoal = this.serviceUpdateGoal.bind(this);
     this.serviceDeleteGoal = this.serviceDeleteGoal.bind(this);
     //goals of user
-    //this.serviceListUserGoals = this.serviceListUserGoals.bind(this);
+    this.serviceListUserGoals = this.serviceListUserGoals.bind(this);
+    //pop-over
+    this.popoverHandleRequestClose = this.popoverHandleRequestClose.bind(this);
+    this.addCheckinToGoal = this.addCheckinToGoal.bind(this);
+    this.addMilestoneToGoal = this.addMilestoneToGoal.bind(this);
+    this.viewGoal = this.viewGoal.bind(this);
   }
 
   componentDidMount(){
     //these methods are called on click events of line with their respective id's
 
     //this.serviceGetCheckin('5a0f6e520c18496660c36582');
-    this.serviceGetMilestone('5a0ff34bf1a27677f633eb83');
+    //this.serviceGetMilestone('5a0ff34bf1a27677f633eb83');
     //this.serviceGetGoal('5a0fbaff32657970852b7ea4');
 
-    this.serviceListUserGoals('5a0cf626b2b4744472a2d5a7');
+    //this.serviceListUserGoals('5a0cf626b2b4744472a2d5a7');
   }
 
   /*******************  services   *******************/
@@ -214,6 +228,20 @@ class App extends React.Component {
     });
   }
 
+  popoverHandleRequestClose(){
+    this.setState({menuOpen: false});
+  }
+
+  addCheckinToGoal(){
+    alert("in add checkin");
+  }
+  addMilestoneToGoal(){
+    alert("in add milestone");
+  }
+  viewGoal(){
+    alert("view goal");
+  }
+
 
   render() {
     let addGoal = <AddGoalForm serviceCreateGoal={this.serviceCreateGoal} user={this.state.user}/>;
@@ -236,6 +264,22 @@ class App extends React.Component {
         <div>
           <AppBar title="Boost"/>
           <Paper style={moduleStyle} zDepth={3} children={editMilestone}/>
+          <FloatingActionButton onClick={this.createNewGoal} style={{ position: 'fixed', top: '87%', right: '2%' }} >
+            <ContentAdd />
+          </FloatingActionButton>
+
+          <Popover
+            open={this.state.menuOpen}
+            anchorEl={this.state.anchorEl}
+            anchorOrigin={{ horizontal: 'left', vertical: 'bottom' }}
+            targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+            onRequestClose={this.popoverHandleRequestClose}>
+            <Menu>
+              <MenuItem primaryText='Add check in' onClick={this.addCheckinToGoal} />
+              <MenuItem primaryText='Add milestone' onClick={this.addMilestoneToGoal} />
+              <MenuItem primaryText='Goal overview' onClick={this.viewGoal} />
+            </Menu>
+          </Popover>
         </div>
       </MuiThemeProvider>
     );
