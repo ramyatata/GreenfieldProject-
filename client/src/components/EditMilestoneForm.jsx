@@ -150,14 +150,18 @@ class EditMilestoneForm extends React.Component {
                   <MenuItem value={true} primaryText="No" />
                   <MenuItem value={false} primaryText="Yes" />
                 </SelectField>
-              </div><br/>
-              <DatePicker name="dateCompleted" value={this.state.dateCompleted}
+              </div>
+              <div className="col-xs-6">
+                <DatePicker name="dateCompleted" value={this.state.dateCompleted}
                 onChange = {this.handleChangeCompleteDate}
                 hintText="Date you completed the milestone"
                 floatingLabelText="Completed Date"
                 fullWidth={true}
               />
-            </div>
+              </div>
+               </div>
+
+
             <TextField name="description" value={this.state.description}
               onChange = {this.handleChange}
               hintText="What do you wana do" floatingLabelText="Description" fullWidth={true}

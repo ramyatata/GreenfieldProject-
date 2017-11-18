@@ -55,19 +55,17 @@ class App extends React.Component {
     this.serviceUpdateGoal = this.serviceUpdateGoal.bind(this);
     this.serviceDeleteGoal = this.serviceDeleteGoal.bind(this);
     //goals of user
-    this.serviceListUserGoals = this.serviceListUserGoals.bind(this);
-
+    //this.serviceListUserGoals = this.serviceListUserGoals.bind(this);
   }
 
   componentDidMount(){
-    //services.resource.list(function(err, results){});
+    //these methods are called on click events of line with their respective id's
 
-    //working
     //this.serviceGetCheckin('5a0f6e520c18496660c36582');
-    //this.serviceGetMilestone('5a0f97c9a48bd76dcf5646ae');
+    this.serviceGetMilestone('5a0ff34bf1a27677f633eb83');
     //this.serviceGetGoal('5a0fbaff32657970852b7ea4');
-    this.serviceListUserGoals('5a0cf626b2b4744472a2d5a7');
 
+    this.serviceListUserGoals('5a0cf626b2b4744472a2d5a7');
   }
 
   /*******************  services   *******************/
@@ -78,8 +76,6 @@ class App extends React.Component {
         console.log('failed in get goals of user');
       } else {
         this.setState({goals: results});
-        console.log(results);
-        console.log('success in get goals of user');
       }
     });
   }
@@ -128,12 +124,14 @@ class App extends React.Component {
 
   /********** Checkin ***********/
   serviceCreateCheckin(checkin, res){
-    services.checkin.create(checkin, res, (err, results) => {
+    const goalId = '5a0fbaff32657970852b7ea4';
+    services.checkin.create(checkin, res, goalId, (err, results) => {
       if(err){
-        console.log('failed creating checking and resource');
+        console.log('failed creating checking and resource', err);
       } else {
         //TODO - close add screen and clear fields
         console.log('created resource and checkin successfully');
+        this.serviceListUserGoals('5a0cf626b2b4744472a2d5a7');
       }
     });
   }
@@ -159,7 +157,8 @@ class App extends React.Component {
     );
   }
   serviceDeleteCheckin(checkinId, resourceId){
-    services.checkin.delete(checkinId, resourceId, function(err, results){
+    const goalId = '5a0fbaff32657970852b7ea4';
+    services.checkin.delete(checkinId, resourceId, goalId, function(err, results){
       if(err){
         console.log('failed deleting checkin and resource');
       } else {
@@ -171,7 +170,8 @@ class App extends React.Component {
 
   /********** Milestone ***********/
   serviceCreateMilestone(milestone, res){
-    services.milestone.create(milestone, res, (err, results) => {
+    const goalId = '5a0fbaff32657970852b7ea4';
+    services.milestone.create(milestone, res, goalId, (err, results) => {
       if(err){
         console.log('failed creating milestone and resource');
       } else {
@@ -203,7 +203,8 @@ class App extends React.Component {
     );
   }
   serviceDeleteMilestone(milestoneId, resourceId){
-    services.milestone.delete(milestoneId, resourceId, function(err, results){
+    const goalId = '5a0fbaff32657970852b7ea4';
+    services.milestone.delete(milestoneId, resourceId, goalId, function(err, results){
       if(err){
         alert('failed deleting milestone and resource');
       } else {
@@ -234,7 +235,7 @@ class App extends React.Component {
       <MuiThemeProvider>
         <div>
           <AppBar title="Boost"/>
-          <Paper style={moduleStyle} zDepth={3} children={editGoal}/>
+          <Paper style={moduleStyle} zDepth={3} children={editMilestone}/>
         </div>
       </MuiThemeProvider>
     );

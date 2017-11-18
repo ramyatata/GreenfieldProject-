@@ -70,6 +70,7 @@ window.services = {
     get: function(id, callback){
       axios.get('http://localhost:3030/api/goals/'+ id)
       .then(function(response) {
+        console.log(response.data);
         callback(null, response.data[0]);
       })
       .catch(function(error){
@@ -109,6 +110,15 @@ window.services = {
         }
       });
     },
+    updateGoal: function(goalID, goalBody, callback){
+      axios.put('http://localhost:3030/api/goals/'+ goalID, goalBody)
+        .then(function(response) {
+          callback(null, response.data);
+        })
+        .catch(function(error){
+          callback(error, null);
+        })
+    },
     listByUser: function(userId, callback){
       axios.get('http://localhost:3030/api/goals/user/'+ userId)
       .then(function(response) {
@@ -122,7 +132,7 @@ window.services = {
 
   checkin: {
     //creates resource and then creates checkin
-    create: function(newCheckin, newRes, callback){
+    create: function(newCheckin, newRes, goalId, callback){
       if(newRes){
         services.resource.create(newRes, function(err, results){
           if(err){
@@ -131,7 +141,23 @@ window.services = {
             newCheckin.resource = results._id;
             axios.post('http://localhost:3030/api/checkins/', newCheckin)
             .then(function(response){
-              callback(null, response.data);
+              //get checkins of goals and update it with new one
+              services.goal.get(goalId, function(err, resGoal){
+                if(err){
+                  callback(err, null);
+                } else {
+                  let checkins = [];
+                  checkins = resGoal.checkin.map((c) => c._id );
+                  checkins.push(response.data._id);
+                  services.goal.updateGoal(goalId, {checkin: checkins}, function(err, updatedGoal){
+                    if(err){
+                      callback(error, null);
+                    } else {
+                      callback(null, updatedGoal.data)
+                    }
+                  })
+                }
+              })
             })
             .catch(function(error){
               callback(error, null);
@@ -185,7 +211,7 @@ window.services = {
   },
   milestone: {
     //creates resource and then creates milestone
-    create: function(newMilestone, newRes, callback){
+    create: function(newMilestone, newRes, goalId, callback){
       if(newRes){
         services.resource.create(newRes, function(err, results){
           if(err){
@@ -193,8 +219,24 @@ window.services = {
           } else {
             newMilestone.resource = results._id;
             axios.post('http://localhost:3030/api/milestones/', newMilestone)
-            .then(function(response){
-              callback(null, response.data);
+             .then(function(response){
+              //get checkins of goals and update it with new one
+              services.goal.get(goalId, function(err, resGoal){
+                if(err){
+                  callback(err, null);
+                } else {
+                  let milestones = [];
+                  milestones = resGoal.milestone.map((m) => m._id );
+                  milestones.push(response.data._id);
+                  services.goal.updateGoal(goalId, {milestone: milestones}, function(err, updatedGoal){
+                    if(err){
+                      callback(error, null);
+                    } else {
+                      callback(null, updatedGoal.data)
+                    }
+                  })
+                }
+              })
             })
             .catch(function(error){
               callback(error, null);
@@ -213,20 +255,37 @@ window.services = {
         callback(error, null);
       })
     },
-    delete: function(MilestoneId, resId, callback){
+    delete: function(MilestoneId, resId, goalId, callback){
       services.resource.delete(resId, function(err, results){
         if(err){
           console.log('Failed in Milestone delete - resource delete');
           callback(err, null);
         } else {
           axios.delete('http://localhost:3030/api/milestones/'+ MilestoneId)
-          .then(function(response) {
-              console.log('Milestone delete success');
-              console.log(response);
-              callback(null, response.data);
-          })
+          .then(function(response){
+              //get checkins of goals and update it with new one
+              console.log('calling goal get '+ goalId);
+              services.goal.get(goalId, function(err, resGoal){
+                if(err){
+                  callback(err, null);
+                } else {
+                  let milestones = [];
+                  milestones = resGoal.milestone.map((m) => m._id );
+                  let index = milestones.findIndex(response.data._id);
+                  if(index !== -1){
+                    milestones.splice(index, 1);
+                  }
+                  services.goal.updateGoal(goalId, {milestone: milestones}, function(err, updatedGoal){
+                    if(err){
+                      callback(error, null);
+                    } else {
+                      callback(null, updatedGoal.data)
+                    }
+                  })
+                }
+              })
+            })
           .catch(function(error){
-            alert("failed in Milestone delete");
             callback(error, null);
           })
         }
